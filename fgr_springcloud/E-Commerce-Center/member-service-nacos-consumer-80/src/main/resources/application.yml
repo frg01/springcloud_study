@@ -1,0 +1,33 @@
+server:
+  port: 80
+spring:
+  application:
+    name: member-serivce-nacos-consumer-80
+  #配置nacos
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #nacos server的地址
+    sentinel:
+      transport:
+        dashboard: localhost:8080 #指定sentinel控制台地址dashboard
+        port: 8719 #端口占用后进行自加
+      datasource:
+        ds1:
+          #流控规则从nacos server  配置中心获取
+          nacos:
+            server-addr: localhost:8848  #nacos server配置中心地址
+            dataId: member-serivce-nacos-consumer-80 #已创建配置的dataId
+            groupId: DEFAULT_GROUP #指定Group
+            data-type: json #匹配配置文件的数据类型
+            rule-type: flow #表示规则类型是流控规则
+#设置暴露所有的监控点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#openfeign和sentinel整合，必须配置
+feign:
+  sentinel:
+    enabled: true

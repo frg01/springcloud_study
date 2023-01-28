@@ -1,0 +1,32 @@
+server:
+  port: 10004
+spring:
+  application:
+    name: member-service-nacos-provider #配置应用名称
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/e_commerce_center_db?useSSL=true&characterEncoding=UTF-8
+    username: root
+    password: fgr
+  #配置nacos
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #配置Nacos server的地址
+#    sentinel:
+#      transport:
+#        dashboard: localhost:8080 #指定sentinel控制台的地址
+#        #transport.port 端口配置会在被监控微服务主机上启动Http Server
+#        #该Http Server与sentinel控制台交互
+#        #控制台添加限流规则，会把规则数据push给Http Server 再将规则注册到sentinel中
+#        #默认8719，被占用则自定从8719开始加1
+#        port: 8719 #指定端口
+##配置暴露所有的监控点
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+mybatis:
+  mapper-locations: classpath:mapper/*.xml #指定mapper.xml文件位置
+  type-aliases-package: com.hspedu.springcloud.entity #实体类所在的包 通过类名就可以引用

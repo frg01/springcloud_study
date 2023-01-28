@@ -1,0 +1,24 @@
+server:
+  port: 10006
+spring:
+  application:
+    name: member-service-nacos-provider #配置应用名称
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/e_commerce_center_db?useSSL=true&characterEncoding=UTF-8
+    username: root
+    password: fgr
+  #配置nacos
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #配置Nacos server的地址
+#配置暴露所有的监控点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+mybatis:
+  mapper-locations: classpath:mapper/*.xml #指定mapper.xml文件位置
+  type-aliases-package: com.hspedu.springcloud.entity #实体类所在的包 通过类名就可以引用

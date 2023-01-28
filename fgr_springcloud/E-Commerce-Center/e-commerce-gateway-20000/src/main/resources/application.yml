@@ -1,0 +1,60 @@
+server:
+  port: 20000
+spring:
+  application:
+    name: e-commerce-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # Flag that enables DiscoveryClient gateway integration
+          #启用了 DiscoveryClient 服务发现
+          enabled: true
+      routes:  #可配置多个路由 List<RouteDefinition> routes
+        - id: member_route01 #路由的id
+          #getway 最终访问的url=uri+Path
+          #匹配后提供路由服务的路由地址：也可以是外网
+          #例如 http://loacalhost:20000/member/get/1
+          #如果匹配Path成功，最终转发的url是http://localhost:10000/member/get/1
+          #如果匹配失败 则有我们的gateway返回404信息
+          #疑问 配置uri固定，则可以不式使用Eureka Server 之后将其使用灵活方式配置
+#          uri: http://localhost:10000
+          # lb:协议名 注册到eureka server的服务名
+          # 默认情况下 负载均衡算法是轮询算法
+          uri: lb://member-service-provider
+          predicates: #断言，可以有多种形式
+            - Path=/member/get/**
+#            - After=2023-01-19T13:40:00.000+08:00[Asia/Shanghai]
+#            - Before=2023-01-20T13:40:00.000+08:00[Asia/Shanghai]
+#            - Between=2023-01-19T13:40:00.000+08:00[Asia/Shanghai],2023-01-21T13:40:00.000+08:00[Asia/Shanghai]
+#            - Cookie=User,fgr
+#            - Header=X-Request-Id,hello
+#            - Host=**.fgrxx.**
+#            - Method=POST,GET
+#            - Query=email, [\w-]+@([a-zA-Z]+\.)+[a-zA-Z]+
+            - RemoteAddr=127.0.0.1
+#          filters:
+#            - AddRequestParameter=color,blue
+#            - AddRequestParameter=address,beijing
+        - id: member_route02 #路由的id
+          #uri: http://localhost:10000
+          uri: lb://member-service-provider
+          predicates: #断言，可以有多种形式
+            #这时如果客户端 访问gateway 的url http://localhost:20000/member/save
+            # 最终访问的url http://localhost:10000/member/save
+            - Path=/member/save
+#        - id: member_route03 #路由的id
+#          uri: http://www.baidu.com
+#          predicates: #断言，可以有多种形式
+#            - Path=/
+
+# 配置Eureka Client
+eureka:
+  instance:
+    hostname: e-commerce-service #老师先配置着
+  client:
+    register-with-eureka: true #将自己注册到eureka-client
+    fetch-registry: true
+    service-url:
+      #将本服务注册到EurekaServer 集群  使用逗号间隔
+      defaultZone: http://eureka9001.com:9001/eureka,http://eureka9002.com:9002/eureka

@@ -1,0 +1,18 @@
+server:
+  port: 80
+spring:
+  application:
+    name: e-commerce-consumer-openfeign
+#配置eureka-client
+eureka:
+  client:
+    register-with-eureka: true #将自己注册到eureka-client
+    fetch-registry: true #可以从eureka拉去需要的远程接口
+    service-url:
+      #将本服务注册到EurekaServer 集群  使用逗号间隔
+      defaultZone: http://eureka9001.com:9001/eureka,http://eureka9002.com:9002/eureka
+
+logging:
+  level:
+  #对MemberFeignService 接口调用 打印信息Debug
+   com.hspedu.springcloud.service.MemberFeignService: debug
